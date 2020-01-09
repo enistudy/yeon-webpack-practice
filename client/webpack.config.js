@@ -1,28 +1,20 @@
-const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const port = process.env.PORT || 5000;
 
 module.exports = {
-  mode: "development",
-  entry: "./src/index.tsx",
-  resolve: {
-    extensions: [".ts", ".tsx", ".js"]
-  },
-  output: {
-    path: path.join(__dirname, "/dist"),
-    filename: "bundle.[hash].js"
-  },
+  name: "webpack-test",
+  mode: "development", // 나중에 production
+  devtool: "inline-source-map",
+  entry: ["./src/index", "@babel/polyfill"],
   module: {
     rules: [
       {
-        // 첫번째 룰
         test: /\.tsx$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
+        loader: "babel-loader"
       },
       {
-        // 두번째 룰
         test: /\.css$/,
         use: [
           {
@@ -40,7 +32,13 @@ module.exports = {
       }
     ]
   },
-  devtool: "inline-source-map",
+  output: {
+    path: path.join(__dirname, "/dist"),
+    filename: "bundle.[hash].js"
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"]
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: "public/index.html"
